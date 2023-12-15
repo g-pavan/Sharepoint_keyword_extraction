@@ -1,0 +1,8 @@
+site_url = ['https://wallerotech.sharepoint.com/sites/adf_test/']
+relative_url = ['/sites/adf_test/']
+folder_name = ['/sites/adf_test/']
+client_id = []
+client_secret = []
+file_names = ['adf_test']
+username = ['pavan.gattupalli@wallero.com']
+password = ['Lakshmi@4256']
