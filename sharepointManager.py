@@ -48,7 +48,8 @@ class SharePointFileManager():
                 url = f'/{self.relative_url}/{library_name}/{folder_name}'
                 self.folder_ctx = self.ctx.web.get_folder_by_server_relative_url(url)
             else:
-                self.folder_ctx = self.ctx.web.get_folder_by_server_relative_url(folder_url).expand(["Versions", "ListItemAllFields"])
+                # self.folder_ctx = self.ctx.web.get_folder_by_server_relative_url(folder_url).expand(["Versions", "ListItemAllFields"])
+                self.folder_ctx = self.ctx.web.get_folder_by_server_relative_url(folder_url)
         except Exception as e:
             logging.error(f"Error setting folder context: {str(e)}")
     
@@ -99,10 +100,10 @@ class SharePointFileManager():
         if bytes_file_obj is not None:
             data = parser.from_buffer(bytes_file_obj)
 
-            key = []
+            # key = []
 
             if data['content'] is not None:
-                s = data['content'].strip().replace('\n', '')
+                # s = data['content'].strip().replace('\n', '')
                 # words = nltk.word_tokenize(s)
                 # words = [w.lower() for w in words]
 
@@ -147,22 +148,22 @@ class SharePointFileManager():
         
         file_url = file.properties['ServerRelativeUrl']
 
-        file_items = file.listItemAllFields
-        self.ctx.load(file_items)
-        self.ctx.execute_query()
+        # file_items = file.listItemAllFields
+        # self.ctx.load(file_items)
+        # self.ctx.execute_query()
 
         file_data = {
             'Title' : self.get_properties_by_field(file.properties, 'Title'),
             'Name' : self.get_properties_by_field(file.properties, 'Name'),
             'filetype' : file_type,
-            'Modified' : self.get_properties_by_field(file_items.properties, 'Modified'),
-            'Project or Product' : self.get_properties_by_field(file_items.properties, 'Trail_x0020_Year'),
-            'Trail Year' : self.get_properties_by_field(file_items.properties, 'Trail_x0020_Year'),
-            'Country' : self.get_properties_by_field(file_items.properties, 'Country'),
-            'Indication' : self.get_properties_by_field(file_items.properties, 'Indication'),
-            'Crop' : self.get_properties_by_field(file_items.properties, 'Crop'),
-            'Target' : self.get_properties_by_field(file_items.properties, 'Target'),
-            'filesize' : self.get_properties_by_field(file_items.properties, 'Length')
+            # 'Modified' : self.get_properties_by_field(file_items.properties, 'Modified'),
+            # 'Project or Product' : self.get_properties_by_field(file_items.properties, 'Trail_x0020_Year'),
+            # 'Trail Year' : self.get_properties_by_field(file_items.properties, 'Trail_x0020_Year'),
+            # 'Country' : self.get_properties_by_field(file_items.properties, 'Country'),
+            # 'Indication' : self.get_properties_by_field(file_items.properties, 'Indication'),
+            # 'Crop' : self.get_properties_by_field(file_items.properties, 'Crop'),
+            # 'Target' : self.get_properties_by_field(file_items.properties, 'Target'),
+            'filesize' : self.get_properties_by_field(file.properties, 'Length')
         }
 
         if file.properties['LinkingUri'] is not None:
@@ -170,10 +171,10 @@ class SharePointFileManager():
         else:
             file_data['path'] = "https://wallero.sharepoint.com" + file_url
         
-        # keywords_dict = self.read_file_data(file_data['filetype'], file_url)
+        keywords_dict = self.read_file_data(file_data['filetype'], file_url)
 
-        # for key, value in keywords_dict.items():
-        #     file_data[key] = value
+        for key, value in keywords_dict.items():
+            file_data[key] = value
         
         self.master_df.add_row(file_data)
     
@@ -200,21 +201,21 @@ class SharePointFileManager():
 
             try:
                 folder_url = folder.properties['ServerRelativeUrl']
-                folder_items = folder.list_item_all_fields
-                self.ctx.load(folder_items)
-                self.ctx.execute_query()
+                # folder_items = folder.list_item_all_fields
+                # self.ctx.load(folder_items)
+                # self.ctx.execute_query()
 
                 folder_data = {
-                    'Title' : self.get_properties_by_field(folder_items.properties, 'Title'),
+                    'Title' : self.get_properties_by_field(folder.properties, 'Title'),
                     'Name' : folder_name,
                     'filetype' : 'Folder',
-                    'Modified': self.get_properties_by_field(folder_items.properties, 'Modified'),
-                    'Project or Product' : self.get_properties_by_field(folder_items.properties, 'Project_x0020_or_x0020_Product'),
-                    'Trail Year' : self.get_properties_by_field(folder_items.properties, 'Trail_x0020_Year'),
-                    'Country' : self.get_properties_by_field(folder_items.properties, 'Country'),
-                    'Indication' : self.get_properties_by_field(folder_items.properties, 'Indication'),
-                    'Crop' : self.get_properties_by_field(folder_items.properties, 'Crop'),
-                    'Target' : self.get_properties_by_field(folder_items.properties, 'Target'),
+                    # 'Modified': self.get_properties_by_field(folder_items.properties, 'Modified'),
+                    # 'Project or Product' : self.get_properties_by_field(folder_items.properties, 'Project_x0020_or_x0020_Product'),
+                    # 'Trail Year' : self.get_properties_by_field(folder_items.properties, 'Trail_x0020_Year'),
+                    # 'Country' : self.get_properties_by_field(folder_items.properties, 'Country'),
+                    # 'Indication' : self.get_properties_by_field(folder_items.properties, 'Indication'),
+                    # 'Crop' : self.get_properties_by_field(folder_items.properties, 'Crop'),
+                    # 'Target' : self.get_properties_by_field(folder_items.properties, 'Target'),
                     # 'Comments' : self.get_properties_by_field(folder_items.properties['Comments']),
                     'path' : "https://wallero.sharepoint.com" + folder_url
                 }

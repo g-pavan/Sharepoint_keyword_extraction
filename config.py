@@ -1,6 +1,6 @@
 site_url = ['https://wallerotech.sharepoint.com/sites/adf_test/']
-relative_url = ['/sites/adf_test/']
-folder_name = ['/sites/adf_test/']
+relative_url = ['/sites/adf_test/Shared Documents/']
+folder_name = ['/sites/adf_test/Shared Documents']
 client_id = []
 client_secret = []
 file_names = ['adf_test']
